@@ -3,14 +3,16 @@ import { Switch, Route, NavLink } from "react-router-dom";
 import Item from "./components/Item";
 import FavItem from "./components/FavItem";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAnother } from "./actions";
+import { FAV_ADD, fetchAnother } from "./actions";
 import { useEffect } from "react";
 
 export default function App() {
   const { current, loading, favs } = useSelector((store) => store);
-
-  function addToFavs() {}
   const dispatch = useDispatch();
+
+  function addToFavs() {
+    dispatch({ type: FAV_ADD, payload: current });
+  }
 
   useEffect(() => {
     dispatch(fetchAnother());
@@ -44,7 +46,10 @@ export default function App() {
           {current && <Item data={current} />}
 
           <div className="flex gap-3 justify-end py-3">
-            <button className="select-none px-4 py-2 border border-blue-700 text-blue-700 hover:border-blue-500 hover:text-blue-500">
+            <button
+              onClick={() => dispatch(fetchAnother())}
+              className="select-none px-4 py-2 border border-blue-700 text-blue-700 hover:border-blue-500 hover:text-blue-500"
+            >
               Başka bir tane
             </button>
             <button
@@ -59,8 +64,8 @@ export default function App() {
         <Route path="/favs">
           <div className="flex flex-col gap-3">
             {favs.length > 0 ? (
-              favs.map((item) => (
-                <FavItem key={item.key} id={item.key} title={item.activity} />
+              favs.map((item, key) => (
+                <FavItem key={key} id={key} title={item} />
               ))
             ) : (
               <div className="bg-white p-6 text-center shadow-md">
