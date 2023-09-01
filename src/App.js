@@ -3,7 +3,7 @@ import { Switch, Route, NavLink } from "react-router-dom";
 import Item from "./components/Item";
 import FavItem from "./components/FavItem";
 import { useDispatch, useSelector } from "react-redux";
-import { FAV_ADD, fetchAnother } from "./actions";
+import { addFav, fetchAnother } from "./actions";
 import { useEffect } from "react";
 
 export default function App() {
@@ -11,9 +11,9 @@ export default function App() {
   const dispatch = useDispatch();
 
   function addToFavs() {
-    dispatch({ type: FAV_ADD, payload: current });
+    dispatch(addFav(current));
   }
-
+  // toast.info("Favoriye aldın")
   useEffect(() => {
     dispatch(fetchAnother());
   }, []);
@@ -64,8 +64,8 @@ export default function App() {
         <Route path="/favs">
           <div className="flex flex-col gap-3">
             {favs.length > 0 ? (
-              favs.map((item, key) => (
-                <FavItem key={key} id={key} title={item} />
+              favs.map((item) => (
+                <FavItem key={item.key} id={item.key} title={item.activity} />
               ))
             ) : (
               <div className="bg-white p-6 text-center shadow-md">
